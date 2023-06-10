@@ -30,7 +30,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //按照浏览量进行排序
         queryWrapper.orderByDesc(Article::getViewCount);
         //最多只查询10条记录(分页第一页查询10条记录)
-        Page<Article> page = new Page<Article>(SystemConstants.pag1,10);
+        Page<Article> page = new Page<Article>(SystemConstants.pag1,SystemConstants.pag10);
         page(page, queryWrapper);
 
         //符合检索条件对象的所有字段
@@ -44,10 +44,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             BeanUtils.copyProperties(record, vo);
             articleVos.add(vo);
         }
-
-
-
-
 
 
 

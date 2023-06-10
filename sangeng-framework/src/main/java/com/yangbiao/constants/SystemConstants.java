@@ -11,8 +11,11 @@ public class SystemConstants
      */
     public static final int ARTICLE_STATUS_NORMAL = 0;
     /**
-     *  翻页
+     *  显示的页数
      */
     public static final long pag1 = 1;
-    
+    /**
+     *  每页显示的数据
+     */
+    public static long pag10 = 10;
 }
