@@ -10,6 +10,7 @@ import com.yangbiao.domain.entity.Article;
 import com.yangbiao.domain.vo.HotArticleVo;
 import com.yangbiao.mapper.ArticleMapper;
 import com.yangbiao.service.ArticleService;
+import com.yangbiao.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -35,19 +36,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         //符合检索条件对象的所有字段
         List<Article> records = page.getRecords();
-        //在次包装
-        List<HotArticleVo> articleVos = new ArrayList<HotArticleVo>();
-        //bean拷贝
-        //records符合查询条件的对象的所有字段过于敏感 用vo在次包装
-        for (Article record : records) {
-            HotArticleVo vo = new HotArticleVo();
-            BeanUtils.copyProperties(record, vo);
-            articleVos.add(vo);
-        }
+
+//        //在次包装
+//        List<HotArticleVo> articleVos = new ArrayList<HotArticleVo>();
+//        //bean拷贝
+//        //records符合查询条件的对象的所有字段过于敏感 用vo在次包装
+//        for (Article record : records) {
+//            HotArticleVo vo = new HotArticleVo();
+//            BeanUtils.copyProperties(record, vo);
+//            articleVos.add(vo);
+//        }
+
+        List<HotArticleVo> vs = BeanCopyUtils.copyBeanList(records, HotArticleVo.class);
 
 
-
-        return ResponseResult.okResult(articleVos);
+        return ResponseResult.okResult(vs);
     }
 
 

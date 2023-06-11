@@ -43,7 +43,7 @@ public class BeanCopyUtils {
     }
 
     //集合的copy 使用stream
-    public static <V> List<V> copyBeanList(List<Object> list, Class<V> clazz) {
+    public static <O, V> List<V> copyBeanList(List<O> list, Class<V> clazz) {
         return list.stream()
                 .map(o -> copyBean(o, clazz))
                 .collect(Collectors.toList());
