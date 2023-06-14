@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/**
+ *Bean的拷贝工具类的封装
+ */
 public class BeanCopyUtils {
 
     /**
@@ -39,6 +42,7 @@ public class BeanCopyUtils {
             e.printStackTrace();
         }
 
+        //返回结果
         return result;
     }
 
