@@ -4,10 +4,7 @@ import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Article;
 import com.yangbiao.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,11 +18,18 @@ public class ArticleController {
     @GetMapping("/hotArticleList")
     public ResponseResult hotArticleList(){
 
-
         ResponseResult result = articleService.hotArticleList();
 
-
-
         return result;
+    }
+
+    //query类型的参数：相当于在地址后面拼接“?id=1&name=yangbiao”
+    //请求参数中对应字段空时 赋给默认的值
+    @GetMapping("/articleList")
+    public ResponseResult articleList(@RequestParam(defaultValue = "1") Integer pageNum,
+                                      @RequestParam(defaultValue = "1") Integer pageSize,
+                                       Long categoryId){
+
+        return articleService.articleList(pageNum,pageSize,categoryId);
     }
 }
