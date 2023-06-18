@@ -32,4 +32,9 @@ public class ArticleController {
 
         return articleService.articleList(pageNum,pageSize,categoryId);
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult getArticleDetail(@RequestParam("id") Long id){
+        return articleService.getArticleDetail(id);
+    }
 }

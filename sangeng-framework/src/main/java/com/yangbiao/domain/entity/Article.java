@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 文章表(Article)表实体类
@@ -21,6 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @SuppressWarnings("serial")
 @TableName("sg_article")
+//返回这个当前对象本身
+@Accessors(chain = true)
 public class Article {
 
     @TableId

@@ -8,6 +8,7 @@ import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Article;
 import com.yangbiao.domain.entity.Category;
+import com.yangbiao.domain.vo.ArticleDetailVo;
 import com.yangbiao.domain.vo.ArticleListVo;
 import com.yangbiao.domain.vo.HotArticleVo;
 import com.yangbiao.domain.vo.PageVo;
@@ -15,6 +16,7 @@ import com.yangbiao.mapper.ArticleMapper;
 import com.yangbiao.service.ArticleService;
 import com.yangbiao.service.CategoryService;
 import com.yangbiao.utils.BeanCopyUtils;
+import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService{
@@ -78,16 +82,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         lambdaQueryWrapper.orderByDesc(Article::getIsTop);
 
         // 分页查询
-        Page<Article> page = new Page<Article>(pageNum, pageSize);
+        Page<Article> page = new Page<>(pageNum, pageSize);
         page(page,lambdaQueryWrapper);
 
         //查询categoryName 分类名称
         List<Article> articles = page.getRecords();
+        articles = articles.stream()
+                .map(article ->
+                        //把分类名称设置给article
+                        //返回这个当前对象本身
+                        //@Accessors(chain = true) 在实体类中的注解
+                        article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                //收集流里的数据
+                .collect(Collectors.toList());
         //articleId去查询articleName进行设置
-        for (Article article : articles) {
-            Category category = categoryService.getById(article.getCategoryId());
-            article.setCategoryName(category.getName());
-        }
+//        for (Article article : articles) {
+//            Category category = categoryService.getById(article.getCategoryId());
+//            article.setCategoryName(category.getName());
+//        }
 
         //封装查询结果
         List<ArticleListVo> articleListVos =
@@ -96,6 +108,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //PageVo pageVo = new PageVo(articleListVos,page.getTotal());
 
         return ResponseResult.okResult(new PageVo(articleListVos,page.getTotal()));
+    }
+
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
+
+        //转化为VO
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+
+        //根据分类id查询分类名
+       Long categoryId = articleDetailVo.getCategoryId();
+
+       Category category = categoryService.getById(categoryId);
+
+        if(category != null){
+            articleDetailVo.setCategoryName(category.getName());
+        }
+
+        //封装相应返回
+      return ResponseResult.okResult(articleDetailVo);
     }
 
 
