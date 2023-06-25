@@ -20,7 +20,7 @@ import java.util.Objects;
 @Service
 public class BlogLoginServiceImpl implements BlogLoginService {
 
-    @Autowired //默认情况下容器中没有 需要自己创建authenticationManager
+    @Autowired //默认情况下容器中没有 需要自己创建配置类authenticationManager
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -32,10 +32,19 @@ public class BlogLoginServiceImpl implements BlogLoginService {
     public ResponseResult login(User user) {
 
         //接口authenticationManager 实现类 UsernamePasswordAuthenticationToken
+        //UsernamePasswordAuthenticationToken 没有认证传两个参数
         UsernamePasswordAuthenticationToken authenticationToken = new
                 UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword());
 
+        //authenticationManager会调用UserDetailsService进行用户的认证
+        //（默认的UserDetailsService会在内存中查找所以要重新创建一个UserDetailsService在数据库中查找）
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+
+
+        /**
+         * UserDetailsServiceImpl---------------------------------------------------------------------------
+         */
+
 
         //判断是否认证通过
         if(Objects.isNull(authenticate)){

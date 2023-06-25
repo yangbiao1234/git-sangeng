@@ -71,7 +71,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper();
 
         //如果有categoryId 就要 查询时要和传入的相同
-        //Objects.nonNull(categoryId) && categoryId>0 类似于动态sql
+        //Objects.nonNull(categoryId) && categoryId>0 类似于动态sql  true继续执行下边的代码
         lambdaQueryWrapper.eq(Objects.nonNull(categoryId) && categoryId>0,
                 Article::getCategoryId,categoryId);
 

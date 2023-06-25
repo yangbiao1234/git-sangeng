@@ -13,7 +13,7 @@ public interface ArticleService extends IService <Article>{
     ResponseResult hotArticleList();
 
     /**
-     * 主页的文章查询 和通过categoryId来判断是否为分类的文章的查寻（这个方法主页文章的查寻和分类文章的查询）
+     * 主页的文章查询 和通过categoryId来判断是否为分类的文章的查寻（这个方法是主页文章的查寻和分类文章的查询）
      * @param pageNum
      * @param pageSize
      * @param categoryId

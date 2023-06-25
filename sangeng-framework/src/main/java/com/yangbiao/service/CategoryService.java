@@ -13,6 +13,12 @@ import com.yangbiao.domain.entity.Category;
  */
 public interface CategoryService extends IService<Category> {
 
+    /**
+     *页面上需要展示分类列表，用户可以点击具体的分类查看该分类下的文章列表。
+     *
+     *注意： ①要求只展示有发布正式文章的分类 ②必须是正常状态的分类
+     * @return
+     */
     ResponseResult getCategoryList();
 }
 

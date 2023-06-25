@@ -33,13 +33,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public ResponseResult getCategoryList() {
-        //分布查询
-        //查血文章表 状态为已发布
+        //分步查询
+        //查询文章表 状态为已发布
         LambdaQueryWrapper<Article> articleWrapper = new LambdaQueryWrapper();
         articleWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
         List<Article> list = articleService.list(articleWrapper);
         
-        //获取文章的分类id 并去重(Set)
+        //获取文章的分类id 并去重(Set)   为什么要去重：是因为好多文章对应的是一个分类所以要去重的保证单一性
         Set<Long> categoryId = list.stream()
                 .map(article -> article.getCategoryId())
                 .collect(Collectors.toSet());

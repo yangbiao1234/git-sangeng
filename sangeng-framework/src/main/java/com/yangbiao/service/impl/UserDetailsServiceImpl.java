@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-@Service
+@Service //（默认的UserDetailsService会在内存中查找所以要重新创建一个UserDetailsService在数据库中查找）
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
