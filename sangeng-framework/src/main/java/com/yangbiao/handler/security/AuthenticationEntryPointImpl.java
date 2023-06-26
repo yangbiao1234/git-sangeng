@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.utils.WebUtils;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -24,8 +26,16 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         //打印异常信息
         e.printStackTrace();
 
-        ResponseResult response = ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);
+        ResponseResult result = null;
+        if(e instanceof BadCredentialsException){
+            result = ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR.getCode(),e.getMessage());
+        }else if(e instanceof InsufficientAuthenticationException){
+            result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+        }else{
+            result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR.getCode(),"认证或授权失败");
+        }
+
         //响应给前端
-        WebUtils.renderString(httpServletResponse, JSON.toJSONString(response));
+        WebUtils.renderString(httpServletResponse, JSON.toJSONString(result));
     }
 }
