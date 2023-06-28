@@ -22,4 +22,13 @@ public interface BlogLoginService {
      * @return
      */
     ResponseResult login(User user);
+
+    /**
+     * 退出用户
+     * 要实现的操作：
+     *
+     * ​	删除redis中的用户信息
+     * @return
+     */
+    ResponseResult logout();
 }
