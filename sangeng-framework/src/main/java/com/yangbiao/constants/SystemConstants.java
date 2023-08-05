@@ -32,4 +32,9 @@ public class SystemConstants
      *  每页显示的数据
      */
     public static long pag10 = 10;
+
+    /**
+     *  根评论 rootId为-1
+     */
+    public static long rootId = -1;
 }

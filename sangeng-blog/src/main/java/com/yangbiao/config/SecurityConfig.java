@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint(authenticationEntryPoint);
 
-        //Security有默认的退出功能也是”/logout“ 我们自己定义了退出功能 所以要关闭默认的
+        //Security有默认的退出功能也是”/logout“地址 我们自己定义了退出功能 所以要关闭默认的
         http.logout().disable();
 
         //jwtAuthenticationTokenFilter这个拦截器添加到UsernamePasswordAuthenticationFilter之前
