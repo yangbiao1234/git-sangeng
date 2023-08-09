@@ -21,5 +21,13 @@ public interface CommentService extends IService<Comment> {
      * @return
      */
     ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize);
+
+    /**
+     * 用户登录后可以对文章发表评论，也可以对评论进行回复。
+     * ​	用户登录后也可以在友链页面进行评论。
+     * @param comment
+     * @return
+     */
+    ResponseResult addComment(Comment comment);
 }
 

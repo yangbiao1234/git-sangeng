@@ -8,12 +8,15 @@ import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Comment;
 import com.yangbiao.domain.vo.CommentVo;
 import com.yangbiao.domain.vo.PageVo;
+import com.yangbiao.enums.AppHttpCodeEnum;
+import com.yangbiao.exception.SystemException;
 import com.yangbiao.mapper.CommentMapper;
 import com.yangbiao.service.CommentService;
 import com.yangbiao.service.UserService;
 import com.yangbiao.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -55,6 +58,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return ResponseResult.okResult(new PageVo(commentVoList,page.getTotal()));
     }
 
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        //评论内容不能为空
+        if(!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        //MyBatis-Plus（简称为MP）而save方法用于向数据库中插入一条新的记录。它接受一个实体对象作为参数
+        save(comment);
+        return ResponseResult.okResult();
+    }
+
     /**
      * 根据根评论的id查询所对应的子评论的集合
      * @param id 根评论的id
@@ -75,7 +89,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
         //遍历vo集合
         for (CommentVo commentVo : commentVos) {
-            //通过creatyBy查询用户的昵称并赋值
+            //通过creatyBy查询用户的昵称并赋值  commentVo.getCreateBy():对应用户的id
             String nickName = userService.getById(commentVo.getCreateBy()).getNickName();
             commentVo.setUsername(nickName);
             //通过toCommentUserId查询用户的昵称并赋值
