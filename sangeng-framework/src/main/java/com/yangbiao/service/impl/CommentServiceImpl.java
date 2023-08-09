@@ -33,11 +33,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private UserService userService;
 
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         //查询对应文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         //对articleId进行判断
-        queryWrapper.eq(Comment::getArticleId,articleId);
+        queryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId,articleId);
         //根评论 rootId为-1
         queryWrapper.eq(Comment::getRootId,SystemConstants.rootId);
 
@@ -67,6 +67,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //MyBatis-Plus（简称为MP）而save方法用于向数据库中插入一条新的记录。它接受一个实体对象作为参数
         save(comment);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult commentList(String linkComment, Integer pageNum, Integer pageSize) {
+        return null;
     }
 
     /**

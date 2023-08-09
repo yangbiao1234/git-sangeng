@@ -1,5 +1,6 @@
 package com.yangbiao.controller;
 
+import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Comment;
 import com.yangbiao.service.CommentService;
@@ -27,11 +28,28 @@ public class CommentController {
      */
     @GetMapping("/commentList")
     public ResponseResult commentList(Long articleId,Integer pageNum,Integer pageSize){
-        return commentService.commentList(articleId,pageNum,pageSize);
+        return commentService.commentList(SystemConstants.ARTICLE_COMMENT,articleId,pageNum,pageSize);
     }
 
+    /**
+     * 添加评论
+     * @param comment
+     * @return
+     */
     @PostMapping
     public ResponseResult addComment(@RequestBody Comment comment){
         return commentService.addComment(comment);
+    }
+
+    /**
+     * 查询友链评论
+     * @param
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/linkCommentList")
+    public ResponseResult linkCommentList(Integer pageNum,Integer pageSize){
+            return commentService.commentList(SystemConstants.LINK_COMMENT,null,pageNum,pageSize);
     }
 }

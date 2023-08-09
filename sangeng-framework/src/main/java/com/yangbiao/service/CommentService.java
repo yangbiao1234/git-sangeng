@@ -15,12 +15,14 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 文章详情页面要展示这篇文章下的评论列表。
+     *
+     * @param commentType
      * @param articleId
      * @param pageNum
      * @param pageSize
      * @return
      */
-    ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize);
+    ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize);
 
     /**
      * 用户登录后可以对文章发表评论，也可以对评论进行回复。
@@ -29,5 +31,17 @@ public interface CommentService extends IService<Comment> {
      * @return
      */
     ResponseResult addComment(Comment comment);
+
+    /**
+     * 友链页面也需要查询对应的评论列表
+     * Query格式请求参数：
+     * pageNum: 页码
+     * pageSize: 每页条数
+     * @param linkComment
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    ResponseResult commentList(String linkComment, Integer pageNum, Integer pageSize);
 }
 

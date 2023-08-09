@@ -29,6 +29,17 @@ public class SystemConstants
     public static final long pag1 = 1;
 
     /**
+     *评论类型（0代表文章评论，1代表友链评论）
+     */
+    public static final String ARTICLE_COMMENT = "0";
+
+    /**
+     *评论类型（0代表文章评论，1代表友链评论）
+     */
+    public static final String LINK_COMMENT = "1";
+
+
+    /**
      *  每页显示的数据
      */
     public static long pag10 = 10;
