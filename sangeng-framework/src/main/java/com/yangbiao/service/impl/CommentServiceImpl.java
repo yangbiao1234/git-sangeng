@@ -69,10 +69,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return ResponseResult.okResult();
     }
 
-    @Override
-    public ResponseResult commentList(String linkComment, Integer pageNum, Integer pageSize) {
-        return null;
-    }
 
     /**
      * 根据根评论的id查询所对应的子评论的集合

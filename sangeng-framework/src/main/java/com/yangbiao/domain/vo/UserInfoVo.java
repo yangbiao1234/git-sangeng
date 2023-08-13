@@ -21,8 +21,14 @@ public class UserInfoVo {
      */
     private String avatar;
 
+    /**
+     * 用户性别（0男，1女，2未知）
+     */
     private String sex;
 
+    /**
+     * 邮箱
+     */
     private String email;
 
 

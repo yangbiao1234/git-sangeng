@@ -14,8 +14,12 @@ import com.yangbiao.domain.entity.Comment;
 public interface CommentService extends IService<Comment> {
 
     /**
+     * String commentType 评论类型（0代表文章评论，1代表友链评论）
      * 文章详情页面要展示这篇文章下的评论列表。
-     *
+     * 友链页面也需要查询对应的评论列表
+     *      * Query格式请求参数：
+     *      * pageNum: 页码
+     *      * pageSize: 每页条数
      * @param commentType
      * @param articleId
      * @param pageNum
@@ -32,16 +36,5 @@ public interface CommentService extends IService<Comment> {
      */
     ResponseResult addComment(Comment comment);
 
-    /**
-     * 友链页面也需要查询对应的评论列表
-     * Query格式请求参数：
-     * pageNum: 页码
-     * pageSize: 每页条数
-     * @param linkComment
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    ResponseResult commentList(String linkComment, Integer pageNum, Integer pageSize);
 }
 

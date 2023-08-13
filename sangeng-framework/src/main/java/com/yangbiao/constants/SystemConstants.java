@@ -48,4 +48,10 @@ public class SystemConstants
      *  根评论 rootId为-1
      */
     public static long rootId = -1;
+
+    /**
+     *  2023/8/1
+     *  七牛云30天测试域名
+     */
+    public static String httpUrl = "http://rz4p9h55w.hb-bkt.clouddn.com";
 }
