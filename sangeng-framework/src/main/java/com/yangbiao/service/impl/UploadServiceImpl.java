@@ -32,9 +32,13 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public ResponseResult uploadImg(MultipartFile img) {
-        //判断文件类型或者大小
         //获取原始文件名
-        String originalFilename = img.getOriginalFilename();
+        String originalFilename = null;
+        try{
+             originalFilename = img.getOriginalFilename();
+        } catch (NullPointerException e) {
+            throw new SystemException(AppHttpCodeEnum.FILE_TYPE_NULL);
+        }
 
         //对原始文件后缀进行判断
         if(!originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png")){
@@ -43,7 +47,6 @@ public class UploadServiceImpl implements UploadService {
 
         //如果判断通过上传文件到OSS
         String filePath = PathUtils.generateFilePath(originalFilename);
-
 
         String url = uploadOss(img, filePath);
 

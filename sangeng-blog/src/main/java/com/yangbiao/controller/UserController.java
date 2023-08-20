@@ -5,6 +5,9 @@ import com.yangbiao.domain.entity.User;
 import com.yangbiao.service.LinkService;
 import com.yangbiao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +26,6 @@ public class UserController {
      */
     @GetMapping("/userInfo")
     public ResponseResult getAllLink() {
-
         return userService.userInfo();
     }
 
@@ -33,6 +35,27 @@ public class UserController {
     @PostMapping("/userInfo")
     public ResponseResult userInfo(User user){
         return userService.updateUserInfo(user);
+    }
+
+    /**
+     * 要求用户能够在注册界面完成用户的注册。要求用户名，昵称，邮箱不能和数据库中原有的数据重复。
+     * 如果某项重复了注册失败并且要有对应的提示。
+     * 并且要求用户名，密码，昵称，邮箱都不能为空。
+     * ​注意:密码必须密文存储到数据库中。
+     */
+    @PostMapping("/register")
+    public ResponseResult register(@Validated User user, BindingResult bindingResult){
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            String messages = bindingResult.getAllErrors()
+                    .stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .reduce((m1, m2) -> m1 + "；" + m2)
+                    .orElse("参数输入有误！");
+            //这里可以抛出自定义异常,或者进行其他操作
+            throw new IllegalArgumentException(messages);
+        }
+        return userService.register(user);
     }
 
 }

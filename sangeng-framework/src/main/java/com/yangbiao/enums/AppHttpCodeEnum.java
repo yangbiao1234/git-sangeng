@@ -12,8 +12,10 @@ public enum AppHttpCodeEnum {
     EMAIL_EXIST(503, "邮箱已存在"),
     REQUIRE_USERNAME(504, "必需填写用户名"),
     LOGIN_ERROR(505,"用户名或密码错误"),
-    FILE_TYPE_ERROR(507,"请上传jpg文件或png文件"),
-    CONTENT_NOT_NULL(506,"内容不能为空");
+    CONTENT_NOT_NULL(506,"内容不能为空"),
+    FILE_TYPE_NULL(507,"文件上传不能为空"),
+    FILE_TYPE_ERROR(508,"请上传jpg文件或png文件"),
+    NICKNAME_EXIST(509, "昵称已存在");
 
 
 
