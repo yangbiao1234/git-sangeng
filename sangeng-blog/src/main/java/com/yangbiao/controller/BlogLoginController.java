@@ -1,6 +1,7 @@
 package com.yangbiao.controller;
 
 
+import com.yangbiao.annotation.SystemLog;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.User;
 import com.yangbiao.enums.AppHttpCodeEnum;
@@ -18,6 +19,13 @@ public class BlogLoginController {
     @Autowired
     private BlogLoginService blogLoginService;
 
+    /**
+     * 需要实现登录功能
+     * ​有些功能必须登录后才能使用，未登录状态是不能使用的。
+     * @param user
+     * @return
+     */
+    @SystemLog(businessName = "登录功能")
     @PostMapping("/login")
     public ResponseResult login(@RequestBody User user){
         if(!StringUtils.hasText(user.getUserName())){
@@ -27,6 +35,12 @@ public class BlogLoginController {
         return blogLoginService.login(user);
     }
 
+    /**
+     *要实现的操作：
+     *删除redis中的用户信息
+     * @return
+     */
+    @SystemLog(businessName = "退出登录")
     @PostMapping("/logout")
     public ResponseResult logout(){
         return blogLoginService.logout();

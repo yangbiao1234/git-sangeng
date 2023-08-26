@@ -1,5 +1,6 @@
 package com.yangbiao.controller;
 
+import com.yangbiao.annotation.SystemLog;
 import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Comment;
@@ -26,6 +27,7 @@ public class CommentController {
      * @param pageSize
      * @return
      */
+    @SystemLog(businessName = "查询评论列表")
     @GetMapping("/commentList")
     public ResponseResult commentList(Long articleId,Integer pageNum,Integer pageSize){
         return commentService.commentList(SystemConstants.ARTICLE_COMMENT,articleId,pageNum,pageSize);
@@ -36,6 +38,7 @@ public class CommentController {
      * @param comment
      * @return
      */
+    @SystemLog(businessName = "添加评论")
     @PostMapping
     public ResponseResult addComment(@RequestBody Comment comment){
         return commentService.addComment(comment);
@@ -48,6 +51,7 @@ public class CommentController {
      * @param pageSize
      * @return
      */
+    @SystemLog(businessName = "查询友链评论")
     @GetMapping("/linkCommentList")
     public ResponseResult linkCommentList(Integer pageNum,Integer pageSize){
             return commentService.commentList(SystemConstants.LINK_COMMENT,null,pageNum,pageSize);

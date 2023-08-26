@@ -1,6 +1,7 @@
 package com.yangbiao.controller;
 
 
+import com.yangbiao.annotation.SystemLog;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class UploadController {
      * @param img
      * @return
      */
+    @SystemLog(businessName = "上传OSS服务器文件")
     @PostMapping("/upload")
     public ResponseResult uploadImg(MultipartFile img){
         return uploadService.uploadImg(img);

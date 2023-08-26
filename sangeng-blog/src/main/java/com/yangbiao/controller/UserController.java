@@ -1,17 +1,14 @@
 package com.yangbiao.controller;
 
+import com.yangbiao.annotation.SystemLog;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.User;
-import com.yangbiao.service.LinkService;
 import com.yangbiao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -24,6 +21,7 @@ public class UserController {
      * 进入个人中心的时候需要能够查看当前用户信息
      * @return
      */
+    @SystemLog(businessName = "进入个人中心查看当前用户信息")
     @GetMapping("/userInfo")
     public ResponseResult getAllLink() {
         return userService.userInfo();
@@ -32,8 +30,9 @@ public class UserController {
     /**
      *在编辑完个人资料后点击保存会对个人资料进行更新。
      */
-    @PostMapping("/userInfo")
-    public ResponseResult userInfo(User user){
+    @SystemLog(businessName = "更新用户信息")
+    @PutMapping("/userInfo")
+    public ResponseResult userInfo(@RequestBody User user){
         return userService.updateUserInfo(user);
     }
 
@@ -43,6 +42,7 @@ public class UserController {
      * 并且要求用户名，密码，昵称，邮箱都不能为空。
      * ​注意:密码必须密文存储到数据库中。
      */
+    @SystemLog(businessName = "注册用户")
     @PostMapping("/register")
     public ResponseResult register(@Validated User user, BindingResult bindingResult){
         // 参数校验

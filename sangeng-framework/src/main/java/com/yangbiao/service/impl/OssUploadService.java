@@ -24,7 +24,7 @@ import java.io.InputStream;
 @Service
 @Data
 @ConfigurationProperties(prefix = "oss")
-public class UploadServiceImpl implements UploadService {
+public class OssUploadService implements UploadService {
 
     private String accessKey;
     private String secretKey;
@@ -33,12 +33,13 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public ResponseResult uploadImg(MultipartFile img) {
         //获取原始文件名
-        String originalFilename = null;
-        try{
-             originalFilename = img.getOriginalFilename();
-        } catch (NullPointerException e) {
-            throw new SystemException(AppHttpCodeEnum.FILE_TYPE_NULL);
-        }
+        String originalFilename = img.getOriginalFilename();
+//        String originalFilename = null;
+//        try{
+//             originalFilename = img.getOriginalFilename();
+//        } catch (NullPointerException e) {
+//            throw new SystemException(AppHttpCodeEnum.FILE_TYPE_NULL);
+//        }
 
         //对原始文件后缀进行判断
         if(!originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png")){
@@ -91,7 +92,7 @@ public class UploadServiceImpl implements UploadService {
         } catch (Exception ex) {
             //ignore
         }
-        return SystemConstants.httpUrl + "/" + key;
+        return "SystemConstants.httpUrl + / + key";
     }
 }
 
