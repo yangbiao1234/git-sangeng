@@ -27,4 +27,12 @@ public interface ArticleService extends IService <Article>{
      * @return
      */
     ResponseResult getArticleDetail(Long id);
+
+    /**
+     * 更新浏览次数 在用户浏览博文时要实现对应博客浏览量的增加。
+     * ArticleController中增加方法更新阅读数
+     * @param id
+     * @return
+     */
+    ResponseResult updateViewCount(Long id);
 }

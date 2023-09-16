@@ -20,7 +20,7 @@ public class UploadController {
      * @param img
      * @return
      */
-    @SystemLog(businessName = "上传OSS服务器文件")
+    //@SystemLog(businessName = "上传OSS服务器文件") 释放注解上传文件就会失败
     @PostMapping("/upload")
     public ResponseResult uploadImg(MultipartFile img){
         return uploadService.uploadImg(img);

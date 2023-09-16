@@ -10,6 +10,7 @@ import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.JwtUtil;
 import com.yangbiao.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
 
     //Authentication接口: 它的实现类，表示当前访问系统的用户，封装了用户相关信息。
     //AuthenticationManager接口：定义了认证Authentication的方法
+
     @Override
     public ResponseResult login(User user) {
 

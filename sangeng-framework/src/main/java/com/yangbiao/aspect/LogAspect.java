@@ -35,7 +35,7 @@ public class LogAspect {
      * joinPoint 被增强方法的信息封装的对象
      */
     @Around("pt()")
-    public Object   printLog(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable {
 
         //joinPoint.proceed():目标方法的调用       try快捷键: CTRL + ALT +T
         Object ret;

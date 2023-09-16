@@ -63,7 +63,19 @@ public class ArticleController {
      */
     @SystemLog(businessName = "文章详情接口")
     @GetMapping("/{id}")
-    public ResponseResult getArticleDetail(@RequestParam("id") Long id){
+    public ResponseResult getArticleDetail(@PathVariable("id") Long id){
         return articleService.getArticleDetail(id);
     }
+
+    /**
+     * 更新浏览次数 在用户浏览博文时要实现对应博客浏览量的增加。
+     * ArticleController中增加方法更新阅读数
+     * @param id
+     * @return
+     */
+    @PutMapping("/updateViewCount/{id}")
+    public ResponseResult updateViewCount(@PathVariable("id") Long id){
+        return articleService.updateViewCount(id);
+    }
+
 }

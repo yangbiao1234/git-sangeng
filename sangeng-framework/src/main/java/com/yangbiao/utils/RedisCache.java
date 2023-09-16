@@ -235,4 +235,16 @@ public class RedisCache
     {
         return redisTemplate.keys(pattern);
     }
+
+    /**
+     * 它使用了redisTemplate对象的boundHashOps方法来操作Redis。
+     * 传入的参数包括key（缓存的键名）、hKey（哈希表中的键名）和v（要递增的值）。
+     * 通过调用increment方法，可以将hKey对应的值递增v。
+     * @param key
+     * @param hKey
+     * @param v
+     */
+    public void incrementCacheMapValue(String key,String hKey,long v){
+        redisTemplate.boundHashOps(key).increment(hKey, v);
+    }
 }

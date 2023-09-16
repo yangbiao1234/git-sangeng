@@ -1,0 +1,27 @@
+server:
+  port: 8989
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sg_blog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 6MB
+mybatis-plus:
+  configuration:
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+  mapper-locations: /map/*.xml #sql映射文件位置(默认值但必须配置来应对P106中普通用户查询权限信息的BUG)
+oss:
+  accessKey: r3qihDAFNdgb7y9_n6qnsLw23tAT8XZy5ox93V5G
+  secretKey: noD-9W23lUoWc9yrH56J3ExpoP5B2wloRhoOGLLz
+  bucket: sg-yang
