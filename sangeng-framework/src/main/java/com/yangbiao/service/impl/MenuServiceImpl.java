@@ -6,6 +6,7 @@ import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.mapper.MenuMapper;
 import com.yangbiao.service.MenuService;
+import com.yangbiao.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<String> selectPermsByUserId(Long id) {
         // 这里要分为两种情况 第一种访问者为超级管理员 第二种访问者为普通用户
         //第一种：如果是超级管理员,返回所有权限
-        if (id == 1L) {
+        if (SecurityUtils.isAdmin()) {
             //列表查询用list
             LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper();
             wrapper.eq(Menu::getStatus, SystemConstants.STATUS_NORMAL);
@@ -41,6 +42,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         //第二种：访问者为普通用户 多表联查返回所有权限
         return getBaseMapper().selectPermsByUserId(id);
 
+    }
+
+    @Override
+    public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
+        List<Menu> menus = null;
+        // 这里要分为两种情况 第一种访问者为超级管理员 第二种访问者为普通用户
+        //第一种：如果是超级管理员,返回所有符合要求的menu
+        //如果用户id为1代表管理员，menus中需要有所有菜单类型为C或者M的，状态为正常的，未被删除的权限
+        if (SecurityUtils.isAdmin()) {
+            menus = baseMapper.selectAllRouterMenu();
+        } else {
+            //第二种：访问者为普通用户 多表联查返回当前用户所具有的menu
+            menus = getBaseMapper().selectRouterMenuTreeByUserId(userId);
+        }
+
+        return menus;
     }
 }
 

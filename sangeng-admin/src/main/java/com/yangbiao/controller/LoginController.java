@@ -6,6 +6,7 @@ import com.yangbiao.domain.entity.LoginUser;
 import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.domain.entity.User;
 import com.yangbiao.domain.vo.AdminUserInfoVo;
+import com.yangbiao.domain.vo.RoutersVo;
 import com.yangbiao.domain.vo.UserInfoVo;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.exception.SystemException;
@@ -46,7 +47,7 @@ public class LoginController {
     }
 
     /**
-     *1.台系统需要能实现不同的用户权限可以看到不同的功能。
+     *1.系统需要能实现不同的用户权限可以看到不同的功能。
      *用户只能使用他的权限所允许使用的功能。
      *
      * 2.如果用户id为1代表管理员，roles 中只需要有admin，
@@ -72,6 +73,24 @@ public class LoginController {
         //封装数据返回
         AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms,roleKeyList,userInfoVo);
         return ResponseResult.okResult(adminUserInfoVo);
+    }
+
+    /**
+     * 响应格式:
+     *
+     *前端为了实现动态路由的效果，需要后端有接口能返回用户所能访问的菜单数据。
+     *注意：**返回的菜单数据需要体现父子菜单的层级关系**
+     *如果用户id为1代表管理员，menus中需要有所有菜单类型为C或者M的，状态为正常的，未被删除的权限
+     * @param
+     * @return
+     */
+    @GetMapping("/getRouters")
+    public ResponseResult<RoutersVo> getRouters(){
+        Long userId = SecurityUtils.getUserId();
+        //查询menu 结果是tree的形式
+        List<Menu> menus = menuService.selectRouterMenuTreeByUserId(userId);
+        //封装数据返回
+        return ResponseResult.okResult(new RoutersVo(menus));
     }
 
 }

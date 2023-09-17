@@ -22,5 +22,23 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return
      */
     List<String> selectPermsByUserId(Long userId);
+
+    /**
+     * 查询条件复杂，需自己定义sql。
+     * 第一步点击“MenuMapper”生成mapper映射文件。
+     * 第二步点击方法名“selectRouterMenuTreeByUserId”生成标签
+     * @param
+     * @return
+     */
+    List<Menu> selectAllRouterMenu();
+
+    /**
+     * 查询条件复杂，需自己定义sql。
+     * 第一步点击“MenuMapper”生成mapper映射文件。
+     * 第二步点击方法名“selectRouterMenuTreeByUserId”生成标签
+     * @param
+     * @return
+     */
+    List<Menu> selectRouterMenuTreeByUserId(Long userId);
 }
 
