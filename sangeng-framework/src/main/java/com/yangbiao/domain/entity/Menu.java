@@ -3,11 +3,16 @@ package com.yangbiao.domain.entity;
 import java.util.Date;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.Accessors;
+
 /**
  * 菜单权限表(Menu)表实体类
  *
@@ -19,6 +24,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("sys_menu") //菜单权限表
+@Accessors(chain = true) //链式编程 返回这个Menu对象本身
 public class Menu  {
     //菜单ID@TableId
     private Long id;
@@ -58,6 +64,14 @@ public class Menu  {
     
     private String delFlag;
 
+    /**
+     * /List<Menu> menus = list(wrapper);
+     * sql查询是按照实体类去表中进行查询的 但是表中没有“children”字段
+     * 查询时会报错 SQLSyntaxErrorException: Unknown column 'children' in 'field list'
+     * 这次不用vo实体类 用下边的这个注解（Mybatis-puls知识）
+     */
+    @TableField(exist = false)
+    private List<Menu> children;
 
 
 }

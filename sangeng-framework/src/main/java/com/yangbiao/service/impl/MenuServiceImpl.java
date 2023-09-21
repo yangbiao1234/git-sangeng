@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.sun.javafx.robot.impl.FXRobotHelper.getChildren;
+
 /**
  * 菜单权限表(Menu)表服务实现类
  *
@@ -37,6 +39,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             List<String> perms = menus.stream()
                     .map(menu -> menu.getPerms())
                     .collect(Collectors.toList());
+            //返回菜单权限表中的权限信息
             return perms;
         }
         //第二种：访问者为普通用户 多表联查返回所有权限
@@ -56,8 +59,42 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             //第二种：访问者为普通用户 多表联查返回当前用户所具有的menu
             menus = getBaseMapper().selectRouterMenuTreeByUserId(userId);
         }
-
+        
+        //构建children：第二级菜单中的内容 采用了递归查找
+        //先找出第一层的菜单，然后去找他们的子菜单设置到children属性中
+        List<Menu> menuTree = builderMenuTree(menus,0l);
         return menus;
+    }
+
+    /**
+     * 先找出第一层的菜单，然后去找他们的子菜单设置到children属性中
+     * .filter()  符合括号中筛选条件的值留下
+     * @param menus
+     * @param parentId
+     * @return
+     */
+    private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
+        List<Menu> menuTree = menus.stream()
+                .filter(menu -> menu.getParentId().equals(parentId))
+                .map(menu -> menu.setChildren(getChildren(menu, menus)))
+                .collect(Collectors.toList());
+
+        return menuTree;
+    }
+
+    /**
+     * 获取入参Menu的子Menu
+     * .filter()  符合括号中筛选条件的值留下
+     * @param menu
+     * @param menus
+     * @return
+     */
+    private List<Menu> getChildren(Menu menu, List<Menu> menus) {
+        List<Menu> childrenList = menus.stream()
+                .filter(m -> m.getParentId().equals(menu.getId()))
+                .collect(Collectors.toList());
+
+        return childrenList;
     }
 }
 

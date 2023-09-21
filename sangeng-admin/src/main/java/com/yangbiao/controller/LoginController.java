@@ -50,15 +50,16 @@ public class LoginController {
      *1.系统需要能实现不同的用户权限可以看到不同的功能。
      *用户只能使用他的权限所允许使用的功能。
      *
-     * 2.如果用户id为1代表管理员，roles 中只需要有admin，
+     * 2.如果用户id为1代表超级管理员，roles 中只需要有admin，
      * permissions中需要有所有菜单类型为C或者F的，状态为正常的，未被删除的权限
      * @return
      */
     @GetMapping("/getInfo")
     public ResponseResult<AdminUserInfoVo> getInfo(){
         //获取当前登录的用户
-        LoginUser loginUser = SecurityUtils.getLoginUser();
-        Long id = loginUser.getUser().getId();
+//        LoginUser loginUser = SecurityUtils.getLoginUser();
+//        Long id = loginUser.getUser().getId();
+        Long id = SecurityUtils.getUserId();
 
         //根据用户Id查询 权限信息（Perms）
         List<String> perms=menuService.selectPermsByUserId(id);
@@ -67,7 +68,7 @@ public class LoginController {
         List<String> roleKeyList = roleService.selectRoleKeyByUserId(id);
 
         //获取用户信息
-        User user = loginUser.getUser();
+        User user = SecurityUtils.getLoginUser().getUser();
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
 
         //封装数据返回

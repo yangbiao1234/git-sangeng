@@ -3,6 +3,7 @@ package com.yangbiao.service.impl;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.LoginUser;
 import com.yangbiao.domain.entity.User;
+import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.service.LoginService;
 import com.yangbiao.utils.JwtUtil;
 import com.yangbiao.utils.RedisCache;
@@ -33,7 +34,7 @@ public class SystemBlogLoginServiceImpl implements LoginService {
 
         //判断是否认证通过
         if(Objects.isNull(authenticate)){
-            throw new RuntimeException("用户名或密码错误");
+            throw new RuntimeException((AppHttpCodeEnum.LOGIN_ERROR).getMsg());
         }
         //获取userid 生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
