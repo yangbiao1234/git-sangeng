@@ -37,6 +37,11 @@ public class LoginController {
     @Autowired //角色信息
     private RoleService roleService;
 
+    /**
+     * 登录接口
+     * @param user
+     * @return
+     */
     @PostMapping("/user/login")
     public ResponseResult login(@RequestBody User user){
         if(!StringUtils.hasText(user.getUserName())){
@@ -44,6 +49,15 @@ public class LoginController {
             throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
         }
         return loginService.login(user);
+    }
+
+    /**
+     * 退出接口
+     * @return
+     */
+    @PostMapping("/user/logout")
+    public ResponseResult logout(){
+        return loginService.logout();
     }
 
     /**

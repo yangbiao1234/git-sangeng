@@ -45,10 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/user/getInfo").authenticated()
 //                .antMatchers("/user/getRouters").authenticated()
 //                //注销接口需要认证才能访问
-//                .antMatchers("/logout").authenticated()
+                .antMatchers("/user/logout").authenticated()
 //                .antMatchers("/user/userInfo").authenticated()
 //                .antMatchers("/upload").authenticated()
-                // 除上面外的所有请求全部不需要认证即可访问
+                // 除上面外的所有请求全部需要认证即可访问
                 .anyRequest().authenticated();
 
         //配置异常处理器

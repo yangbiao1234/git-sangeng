@@ -27,6 +27,10 @@ public class SecurityUtils
         return id != null && id.equals(1L);
     }
 
+    /**
+     * 获取用户id
+     * @return
+     */
     public static Long getUserId() {
         return getLoginUser().getUser().getId();
     }

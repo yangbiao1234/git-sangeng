@@ -2,7 +2,9 @@ package com.yangbiao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.TagListDto;
 import com.yangbiao.domain.entity.Tag;
+import com.yangbiao.domain.vo.PageVo;
 import org.springframework.stereotype.Service;
 
 
@@ -14,7 +16,22 @@ import org.springframework.stereotype.Service;
  */
 public interface TagService extends IService<Tag> {
 
-    //ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
+    /**
+     * Query格式请求参数：
+     *
+     * pageNum: 页码
+     *
+     * pageSize: 每页条数
+     *
+     * name：标签名
+     *
+     * remark：备注
+     * @param pageNum
+     * @param pageSize
+     * @param tagListDto
+     * @return
+     */
+    ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
 
 //    ResponseResult addTag(Tag tag);
 //
