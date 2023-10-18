@@ -2,6 +2,7 @@ package com.yangbiao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.AddTagDto;
 import com.yangbiao.domain.dto.TagListDto;
 import com.yangbiao.domain.entity.Tag;
 import com.yangbiao.domain.vo.PageVo;
@@ -32,6 +33,13 @@ public interface TagService extends IService<Tag> {
      * @return
      */
     ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
+
+    /**
+     * 点击标签管理的新增按钮可以实现新增标签的功能。
+     * @param tagDto
+     * @return
+     */
+    ResponseResult addTag(AddTagDto tagDto);
 
 //    ResponseResult addTag(Tag tag);
 //

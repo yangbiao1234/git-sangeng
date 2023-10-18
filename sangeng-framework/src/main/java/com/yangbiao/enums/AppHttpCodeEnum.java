@@ -15,7 +15,8 @@ public enum AppHttpCodeEnum {
     CONTENT_NOT_NULL(506,"内容不能为空"),
     FILE_TYPE_NULL(507,"文件上传不能为空"),
     FILE_TYPE_ERROR(508,"请上传jpg文件或png文件"),
-    NICKNAME_EXIST(509, "昵称已存在");
+    NICKNAME_EXIST(509, "昵称已存在"),
+    TAG_NAME(510, "请输入标签名");
 
 
 

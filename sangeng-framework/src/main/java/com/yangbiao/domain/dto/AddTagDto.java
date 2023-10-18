@@ -1,28 +1,18 @@
-package com.yangbiao.domain.entity;
-
-import java.util.Date;
-
-import java.io.Serializable;
+package com.yangbiao.domain.dto;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-/**
- * 标签(Tag)表实体类
- *
- * @author makejava
- * @since 2023-09-10 21:44:56
- */
-@SuppressWarnings("serial")
+
+import java.util.Date;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@TableName("sg_tag")
-public class Tag  {
+@AllArgsConstructor
+public class AddTagDto {
     @TableId
     private Long id;
 
@@ -51,7 +41,4 @@ public class Tag  {
     //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
 
-
-
 }
-

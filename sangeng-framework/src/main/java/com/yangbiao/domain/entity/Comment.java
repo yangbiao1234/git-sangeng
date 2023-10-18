@@ -2,8 +2,6 @@ package com.yangbiao.domain.entity;
 
 import java.util.Date;
 
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
