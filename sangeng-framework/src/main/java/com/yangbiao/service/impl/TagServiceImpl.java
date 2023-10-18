@@ -7,12 +7,14 @@ import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.dto.AddTagDto;
 import com.yangbiao.domain.dto.TagListDto;
 import com.yangbiao.domain.entity.Tag;
+import com.yangbiao.domain.entity.User;
 import com.yangbiao.domain.vo.PageVo;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.exception.SystemException;
 import com.yangbiao.mapper.TagMapper;
 import com.yangbiao.service.TagService;
 import com.yangbiao.utils.BeanCopyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +27,9 @@ import org.springframework.util.StringUtils;
  */
 @Service("tagService")
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
+
+    @Autowired
+    private TagMapper tagMapper;
 
     @Override
     public ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto) {
@@ -53,15 +58,30 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         save(tag);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult deleteTag(Long id) {
+        tagMapper.deleteById(id);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getTag(Long id) {
+        Tag tag = tagMapper.selectById(id);
+        AddTagDto addTagDto = BeanCopyUtils.copyBean(tag, AddTagDto.class);
+        return ResponseResult.okResult(addTagDto);
+    }
+
+    @Override
+    public ResponseResult updateTagContent(AddTagDto tagDto) {
+        Tag tag = BeanCopyUtils.copyBean(tagDto,Tag.class);
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Tag::getId, tag.getId());
+        tagMapper.update(tag, queryWrapper);
+        return ResponseResult.okResult();
+    }
 }
-//    @Override
-//        public ResponseResult addTag(Tag tag) {
-//            if (!StringUtils.hasText(tag.getName())){
-//                throw new SystemException(AppHttpCodeEnum.TAG_NAME);
-//            }
-//            save(tag);
-//            return ResponseResult.okResult();
-//        }
+
 //
 //
 //        @Override

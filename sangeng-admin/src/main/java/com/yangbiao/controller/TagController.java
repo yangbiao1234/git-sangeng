@@ -31,6 +31,7 @@ public class TagController {
     }
 
     /**
+     * 新增标签
      * 点击标签管理的新增按钮可以实现新增标签的功能。
      * 自动填充对应字段 P-49
      * @param tagDto
@@ -40,26 +41,41 @@ public class TagController {
     public ResponseResult addTag(@RequestBody AddTagDto tagDto){
         return tagService.addTag(tagDto);
     }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseResult delete(@PathVariable Long id){
-//        tagService.removeById(id);
-//        return ResponseResult.okResult();
-//    }
-//
-//    @PutMapping
-//    public ResponseResult edit(@RequestBody EditTagDto tagDto){
-//        Tag tag = BeanCopyUtils.copyBean(tagDto,Tag.class);
-//        tagService.updateById(tag);
-//        return ResponseResult.okResult();
-//    }
-//
-//
-//    @GetMapping(value = "/{id}")
-//    public ResponseResult getInfo(@PathVariable(value = "id")Long id){
-//        Tag tag = tagService.getById(id);
-//        return ResponseResult.okResult(tag);
-//    }
+
+    /**
+     * 删除标签
+     * 路径：content/tag/6   代表删除id为6的标签数据
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteTag(@PathVariable Long id){
+        return tagService.deleteTag(id);
+    }
+
+    /**
+     * 修改标签第一步点击修改标签查询到要修改的标签
+     * 获取标签信息
+     * 路径：content/tag/6   代表获取id为6的标签数据
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/{id}")
+    public ResponseResult getTag(@PathVariable(value = "id")Long id){
+        return tagService.getTag(id);
+    }
+
+    /**
+     * 修改标签第二部根据id修改标签
+     * 修改标签接口
+     * @param tagDto
+     * @return
+     */
+    @PutMapping
+    public ResponseResult updateTag(@RequestBody AddTagDto tagDto){
+        return tagService.updateTagContent(tagDto);
+    }
+
 //
 //
 //    @GetMapping("/listAllTag")

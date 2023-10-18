@@ -41,11 +41,30 @@ public interface TagService extends IService<Tag> {
      */
     ResponseResult addTag(AddTagDto tagDto);
 
-//    ResponseResult addTag(Tag tag);
-//
-//    ResponseResult deleteTag(Long id);
-//
-//    ResponseResult updateTagContent(Long id);
+
+    /**
+     * 路径：content/tag/6   代表删除id为6的标签数据
+     * @param id
+     * @return
+     */
+    ResponseResult deleteTag(Long id);
+
+    /**
+     * 修改标签第一步点击修改标签查询到要修改的标签
+     * 获取标签信息
+     * 路径：content/tag/6   代表获取id为6的标签数据
+     * @param id
+     * @return
+     */
+    ResponseResult getTag(Long id);
+
+    /**
+     * 修改标签第二部根据id修改标签
+     * 修改标签接口
+     * @param tagDto
+     * @return
+     */
+    ResponseResult updateTagContent(AddTagDto tagDto);
 //
 //    ResponseResult updateTag(Tag tag);
 
