@@ -5,10 +5,13 @@ import com.yangbiao.domain.dto.AddTagDto;
 import com.yangbiao.domain.dto.TagListDto;
 import com.yangbiao.domain.entity.Tag;
 import com.yangbiao.domain.vo.PageVo;
+import com.yangbiao.domain.vo.TagVo;
 import com.yangbiao.service.TagService;
 import com.yangbiao.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/content/tag")
@@ -76,12 +79,14 @@ public class TagController {
         return tagService.updateTagContent(tagDto);
     }
 
-//
-//
-//    @GetMapping("/listAllTag")
-//    public ResponseResult listAllTag(){
-//        List<TagVo> list = tagService.listAllTag();
-//        return ResponseResult.okResult(list);
-//    }
+    /**
+     * 查询所有标签接口
+     * @return
+     */
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        List<TagVo> list = tagService.listAllTag();
+        return ResponseResult.okResult(list);
+    }
 }
 

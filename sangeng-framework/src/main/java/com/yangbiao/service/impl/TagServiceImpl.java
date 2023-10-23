@@ -9,6 +9,7 @@ import com.yangbiao.domain.dto.TagListDto;
 import com.yangbiao.domain.entity.Tag;
 import com.yangbiao.domain.entity.User;
 import com.yangbiao.domain.vo.PageVo;
+import com.yangbiao.domain.vo.TagVo;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.exception.SystemException;
 import com.yangbiao.mapper.TagMapper;
@@ -17,6 +18,8 @@ import com.yangbiao.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 
 /**
@@ -79,6 +82,15 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         queryWrapper.eq(Tag::getId, tag.getId());
         tagMapper.update(tag, queryWrapper);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public List<TagVo> listAllTag() {
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.select(Tag::getId,Tag::getName);
+        List<Tag> list = list(queryWrapper);
+        List<TagVo> tagVos = BeanCopyUtils.copyBeanList(list, TagVo.class);
+        return tagVos;
     }
 }
 

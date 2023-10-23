@@ -6,7 +6,10 @@ import com.yangbiao.domain.dto.AddTagDto;
 import com.yangbiao.domain.dto.TagListDto;
 import com.yangbiao.domain.entity.Tag;
 import com.yangbiao.domain.vo.PageVo;
+import com.yangbiao.domain.vo.TagVo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -65,9 +68,11 @@ public interface TagService extends IService<Tag> {
      * @return
      */
     ResponseResult updateTagContent(AddTagDto tagDto);
-//
-//    ResponseResult updateTag(Tag tag);
 
-   // List<TagVo> listTag();
+    /**
+     * 在写博客界面查询所有的标签的接口
+     * @return
+     */
+    List<TagVo> listAllTag();
 }
 
