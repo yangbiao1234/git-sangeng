@@ -74,4 +74,7 @@ public class SystemConstants
      *  更新redis中 id的浏览量
      */
     public static final String BUTTON = "F";
+
+    /** 正常状态 */
+    public static final String NORMAL = "0";
 }

@@ -3,6 +3,9 @@ package com.yangbiao.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Category;
+import com.yangbiao.domain.vo.CategoryVo;
+
+import java.util.List;
 
 
 /**
@@ -20,5 +23,11 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     ResponseResult getCategoryList();
+
+    /**
+     * 查寻写博客界面中查询所有分类的信息
+     * @return
+     */
+    List<CategoryVo> listAllCategory();
 }
 
