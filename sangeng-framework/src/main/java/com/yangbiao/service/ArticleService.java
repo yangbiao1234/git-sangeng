@@ -2,6 +2,7 @@ package com.yangbiao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.AddArticleDto;
 import com.yangbiao.domain.entity.Article;
 
 public interface ArticleService extends IService <Article>{
@@ -35,4 +36,11 @@ public interface ArticleService extends IService <Article>{
      * @return
      */
     ResponseResult updateViewCount(Long id);
+
+    /**
+     * 5.8.2.4 新增博文并会对添加博客过程中使用事务注解
+     * @param articleDto
+     * @return
+     */
+    ResponseResult add(AddArticleDto articleDto);
 }

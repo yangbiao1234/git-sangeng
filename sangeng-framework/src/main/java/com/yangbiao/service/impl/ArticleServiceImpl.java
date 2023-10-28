@@ -1,11 +1,14 @@
 package com.yangbiao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.AddArticleDto;
 import com.yangbiao.domain.entity.Article;
+import com.yangbiao.domain.entity.ArticleTag;
 import com.yangbiao.domain.entity.Category;
 import com.yangbiao.domain.vo.ArticleDetailVo;
 import com.yangbiao.domain.vo.ArticleListVo;
@@ -13,15 +16,20 @@ import com.yangbiao.domain.vo.HotArticleVo;
 import com.yangbiao.domain.vo.PageVo;
 import com.yangbiao.mapper.ArticleMapper;
 import com.yangbiao.service.ArticleService;
+import com.yangbiao.service.ArticleTagService;
 import com.yangbiao.service.CategoryService;
 import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.RedisCache;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService{
@@ -31,6 +39,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private ArticleTagService articleTagService;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -134,6 +145,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult updateViewCount(Long id) {
         //更新redis中对应 id的浏览量
         redisCache.incrementCacheMapValue(SystemConstants.REDISKEY,id.toString(),1);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    @Transactional //事务的原子性 @Transactional可以作用于接口、类或类方法
+    public ResponseResult add(AddArticleDto articleDto) {
+        //添加博客一共分两步
+        //第一步：添加博客   小提示：如果插入成功插入对应的Id会返回对应当前类id属性
+        //调用save()方法将Article对象保存到数据库中。如果插入成功，会返回对应当前类插入的id属性。
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        save(article);
+
+        //第二部插如关联表 sg_article_tag
+        List<ArticleTag> articleTags = articleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+
+        //在 sg_article_tag 表中添加博客和标签的关系
+        articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
     }
 
