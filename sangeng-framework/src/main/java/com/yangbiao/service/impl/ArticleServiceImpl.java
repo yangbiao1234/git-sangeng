@@ -1,35 +1,32 @@
 package com.yangbiao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.dto.AddArticleDto;
+import com.yangbiao.domain.dto.AdminArticleUpdateDto;
 import com.yangbiao.domain.entity.Article;
 import com.yangbiao.domain.entity.ArticleTag;
 import com.yangbiao.domain.entity.Category;
-import com.yangbiao.domain.vo.ArticleDetailVo;
-import com.yangbiao.domain.vo.ArticleListVo;
-import com.yangbiao.domain.vo.HotArticleVo;
-import com.yangbiao.domain.vo.PageVo;
+import com.yangbiao.domain.vo.*;
+import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.mapper.ArticleMapper;
+import com.yangbiao.mapper.TagMapper;
 import com.yangbiao.service.ArticleService;
 import com.yangbiao.service.ArticleTagService;
 import com.yangbiao.service.CategoryService;
 import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.RedisCache;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService{
@@ -42,6 +39,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private ArticleTagService articleTagService;
+
+    @Autowired
+    private TagMapper tagMapper;
+
+    @Autowired
+    private ArticleMapper articleMapper;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -157,13 +160,80 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
         save(article);
 
-        //第二部插如关联表 sg_article_tag
+        //第二部插入关联表 sg_article_tag
         List<ArticleTag> articleTags = articleDto.getTags().stream()
                 .map(tagId -> new ArticleTag(article.getId(), tagId))
                 .collect(Collectors.toList());
 
         //在 sg_article_tag 表中添加博客和标签的关系
         articleTagService.saveBatch(articleTags);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminArticleList(Integer pageNum, Integer pageSize, AddArticleDto articleDto) {
+
+        AdminArticleListVo adminArticleListVo = BeanCopyUtils.copyBean(articleDto, AdminArticleListVo.class);
+
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(StringUtils.hasText(adminArticleListVo.getTitle()), Article::getTitle, adminArticleListVo.getTitle());
+        wrapper.eq(StringUtils.hasText(adminArticleListVo.getSummary()), Article::getSummary, adminArticleListVo.getSummary());
+        //必须是正式文章(方法引用)
+        wrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
+
+        //分页查询
+        Page<Article> adminArticle = new Page<>();
+        adminArticle.setCurrent(pageNum);
+        adminArticle.setSize(pageSize);
+        page(adminArticle, wrapper);
+
+        //封装数据返回
+        PageVo pageVo = new PageVo(adminArticle.getRecords(), adminArticle.getTotal());
+        return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult adminArticleSelect(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
+        //根据文章id查询标签id 连表查询
+        List<Long> tags = tagMapper.selectTagId(id);
+        //转化为VO
+        AdminArticleUpdateVo adminArticleUpdateVo = BeanCopyUtils.copyBean(article, AdminArticleUpdateVo.class);
+        adminArticleUpdateVo.setTags(tags);
+
+        return ResponseResult.okResult(adminArticleUpdateVo);
+    }
+
+    @Override
+    public ResponseResult adminArticleUpdate(AdminArticleUpdateDto adminArticleUpdateDto) {
+//        1.将AdminArticleDto对象转换为Article对象
+        Article article = BeanCopyUtils.copyBean(adminArticleUpdateDto, Article.class);
+//        2.将博客的标签信息存入标签表
+//          2.1根据当前博客id获取到已有的标签列表
+        //根据文章id查询标签id 连表查询
+        List<Long> topTags = tagMapper.selectTagId(article.getId());
+//          2.2得到修改过后的标签列表
+        List<Long> backTags = article.getTags();
+//          2.3遍历修改过后的标签列表，判断当前博客是否已经有此标签，没有则一条数据添加到sg_article_tag表中
+        for (Long tag:backTags){
+            if (!topTags.contains(tag)){
+                articleTagService.updateById(new ArticleTag(article.getId(), tag));
+            }
+        }
+        updateById(article);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminArticleDelete(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
+        if(article == null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.ARTICLE_NULL);
+
+        }
+        articleMapper.deleteById(id);
         return ResponseResult.okResult();
     }
 

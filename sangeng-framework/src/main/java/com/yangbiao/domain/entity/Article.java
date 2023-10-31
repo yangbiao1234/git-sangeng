@@ -2,6 +2,7 @@ package com.yangbiao.domain.entity;
 
 
 import java.util.Date;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -73,5 +74,8 @@ public class Article {
         this.id = id;
         this.viewCount = viewCount;
     }
+
+    @TableField(exist = false) //实体类的属性在数据库表中不存在
+    private List<Long> tags;
 }
 

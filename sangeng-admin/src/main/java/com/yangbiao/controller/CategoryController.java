@@ -11,6 +11,7 @@ import com.yangbiao.service.CategoryService;
 import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +39,9 @@ public class CategoryController {
 
     /**
      * 文件的下载
+     * @param response
      */
+    @PreAuthorize("@ps.hasPermission('content:category:export')") //对用户权限判断
     @GetMapping("/export")
     public void export(HttpServletResponse response){
 
@@ -60,5 +63,6 @@ public class CategoryController {
             WebUtils.renderString(response, JSON.toJSONString(result));
 
         }
+
     }
 }

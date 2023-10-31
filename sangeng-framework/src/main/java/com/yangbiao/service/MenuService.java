@@ -1,6 +1,7 @@
 package com.yangbiao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Menu;
 
 import java.util.List;
@@ -34,5 +35,24 @@ public interface MenuService extends IService<Menu> {
      * @return
      */
     List<Menu> selectRouterMenuTreeByUserId(Long userId);
+
+    /**
+     *需要展示菜单列表，不需要分页。
+     *可以针对菜单名进行模糊查询
+     *也可以针对菜单的状态进行查询。
+     *菜单要按照父菜单id和orderNum进行排序
+     * @param menu
+     * @return
+     */
+    ResponseResult adminMenuList(Menu menu);
+
+    /**
+     * 可以新增菜单
+     * 请求体参数：
+     * ​Menu类对应的json格式
+     * @param menu
+     * @return
+     */
+    ResponseResult adminMenuPuts(Menu menu);
 }
 

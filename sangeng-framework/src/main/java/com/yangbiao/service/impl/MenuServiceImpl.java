@@ -3,11 +3,14 @@ package com.yangbiao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.constants.SystemConstants;
+import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.mapper.MenuMapper;
 import com.yangbiao.service.MenuService;
 import com.yangbiao.utils.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
@@ -23,6 +26,10 @@ import static com.sun.javafx.robot.impl.FXRobotHelper.getChildren;
  */
 @Service("menuService")
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
+    @Autowired
+    private MenuService menuService;
+
 
     @Override
     public List<String> selectPermsByUserId(Long id) {
@@ -64,6 +71,31 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         //先找出第一层的菜单，然后去找他们的子菜单设置到children属性中
         List<Menu> menuTree = builderMenuTree(menus,0l);
         return menus;
+    }
+
+    @Override
+    public ResponseResult adminMenuList(Menu menu) {
+        //列表查询用list
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper();
+        wrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
+        wrapper.eq(StringUtils.hasText(menu.getStatus()), Menu::getStatus, menu.getStatus());
+        //MP会自动查询未被删除的权限 所有不用写条件
+        //.map可以对流中的元素进行计算或者转化
+        List<Menu> menus = list(wrapper);
+
+        //集合数据按照 orderNum字段进行排序
+        List<Menu> adminMenuList = list().stream()
+                .sorted((o1, o2) -> o1.getOrderNum() - o2.getOrderNum())
+                .collect(Collectors.toList());
+
+
+        return ResponseResult.okResult(adminMenuList);
+    }
+
+    @Override
+    public ResponseResult adminMenuPuts(Menu menu) {
+        menuService.save(menu);
+        return ResponseResult.okResult();
     }
 
     /**

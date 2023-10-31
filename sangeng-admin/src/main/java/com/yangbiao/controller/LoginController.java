@@ -10,7 +10,6 @@ import com.yangbiao.domain.vo.RoutersVo;
 import com.yangbiao.domain.vo.UserInfoVo;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.exception.SystemException;
-import com.yangbiao.mapper.MenuMapper;
 import com.yangbiao.service.LoginService;
 import com.yangbiao.service.MenuService;
 import com.yangbiao.service.RoleService;
