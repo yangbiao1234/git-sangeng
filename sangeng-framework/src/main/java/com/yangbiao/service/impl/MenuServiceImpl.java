@@ -5,15 +5,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Menu;
+import com.yangbiao.domain.entity.Tag;
+import com.yangbiao.domain.vo.MenuVo;
+import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.mapper.MenuMapper;
 import com.yangbiao.service.MenuService;
+import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.sun.javafx.robot.impl.FXRobotHelper.getChildren;
@@ -29,6 +32,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private MenuMapper menuMapper;
 
 
     @Override
@@ -95,6 +101,36 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public ResponseResult adminMenuPuts(Menu menu) {
         menuService.save(menu);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminMenuSelectId(Long id) {
+
+        Menu menu = menuMapper.selectById(id);
+        MenuVo menuVo = BeanCopyUtils.copyBean(menu, MenuVo.class);
+        return ResponseResult.okResult(menuVo);
+    }
+
+    @Override
+    public ResponseResult adminMenuPut(Menu menu) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getId, menu.getId());
+        menuMapper.update(menu, queryWrapper);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminMenuDelete(long id) {
+        //能够删除菜单，但是如果要删除的菜单有子菜单则提示：存在子菜单不允许删除 并且删除失败。
+        Menu menu = menuMapper.selectById(id);
+        if (SystemConstants.PARENT_ID.equals(menu.getParentId())) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARENTID_NULL);
+        }
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Menu::getId, menu.getId());
+        menuMapper.delete(queryWrapper);
+
         return ResponseResult.okResult();
     }
 

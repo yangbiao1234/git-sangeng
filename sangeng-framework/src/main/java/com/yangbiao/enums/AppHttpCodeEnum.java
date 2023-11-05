@@ -17,7 +17,8 @@ public enum AppHttpCodeEnum {
     FILE_TYPE_ERROR(508,"请上传jpg文件或png文件"),
     NICKNAME_EXIST(509, "昵称已存在"),
     TAG_NAME(510, "请输入标签名"),
-    ARTICLE_NULL(511, "文章不存在");
+    ARTICLE_NULL(511, "文章不存在"),
+    PARENTID_NULL(512, "存在子菜单不允许删除");
 
 
 

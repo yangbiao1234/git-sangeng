@@ -75,11 +75,19 @@ public class SystemConstants
      */
     public static final String BUTTON = "F";
 
-    /** 正常状态 */
+    /**
+     * 正常状态
+     */
     public static final String NORMAL = "0";
 
 
-    /** 后台管理员用户 */
+    /**
+     * 后台管理员用户
+     */
     public static final String ADMAIN = "1";
+    /**
+     * 菜单权限表父菜单Id
+     */
+    public static final String PARENT_ID = "0";
 
 }
