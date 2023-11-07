@@ -218,9 +218,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 //          2.3遍历修改过后的标签列表，判断当前博客是否已经有此标签，没有则一条数据添加到sg_article_tag表中
         for (Long tag:backTags){
             if (!topTags.contains(tag)){
+                //根据 ID 选择修改
                 articleTagService.updateById(new ArticleTag(article.getId(), tag));
             }
         }
+        //根据 ID 选择修改 实体对象
         updateById(article);
         return ResponseResult.okResult();
     }

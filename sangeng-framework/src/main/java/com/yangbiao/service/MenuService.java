@@ -44,7 +44,7 @@ public interface MenuService extends IService<Menu> {
      * @param menu
      * @return
      */
-    ResponseResult adminMenuList(Menu menu);
+    List<Menu> adminMenuList(Menu menu);
 
     /**
      * 可以新增菜单

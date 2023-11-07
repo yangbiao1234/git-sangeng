@@ -80,7 +80,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public ResponseResult adminMenuList(Menu menu) {
+    public List<Menu> adminMenuList(Menu menu) {
         //列表查询用list
         LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper();
         wrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
@@ -95,7 +95,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .collect(Collectors.toList());
 
 
-        return ResponseResult.okResult(adminMenuList);
+        return adminMenuList;
     }
 
     @Override

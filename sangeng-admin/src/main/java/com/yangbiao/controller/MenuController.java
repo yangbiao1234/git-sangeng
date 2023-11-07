@@ -3,11 +3,15 @@ package com.yangbiao.controller;
 
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Menu;
+import com.yangbiao.domain.vo.MenuTreeVo;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.service.ArticleService;
 import com.yangbiao.service.MenuService;
+import com.yangbiao.utils.SystemConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/system/menu")
@@ -24,7 +28,7 @@ public class MenuController {
     @GetMapping("/list") //@RequestParam注解将请求参数绑定到方法的参数上。
     public ResponseResult adminMenuList(Menu menu){
 
-        return menuService.adminMenuList(menu);
+        return ResponseResult.okResult(menuService.adminMenuList(menu));
     }
 
     /**
@@ -75,6 +79,17 @@ public class MenuController {
     public ResponseResult adminMenuPut(@PathVariable long id){
 
         return menuService.adminMenuDelete(id);
+    }
+
+    /**
+     * 获取菜单下拉树列表
+     */
+    @GetMapping("/treeselect")
+    public ResponseResult treeselect() {
+        //复用之前的selectMenuList方法。方法需要参数，参数可以用来进行条件查询，而这个方法不需要条件，所以直接new Menu()传入
+        List<Menu> menus = menuService.adminMenuList(new Menu());
+        List<MenuTreeVo> options =  SystemConverter.buildMenuSelectTree(menus);
+        return ResponseResult.okResult(options);
     }
 
 }

@@ -57,12 +57,16 @@ public class Article {
     /**
      * 以下四个属性为数据可自定义填充对象
      */
+    //创建者
     @TableField(fill = FieldFill.INSERT)
     private Long createBy;
+    //创建时间
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
+    //更改者
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
+    //更改时间
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
