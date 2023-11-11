@@ -2,6 +2,7 @@ package com.yangbiao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.AdminRoleDto;
 import com.yangbiao.domain.dto.RoleDto;
 import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.domain.entity.Role;
@@ -41,5 +42,20 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     ResponseResult adminRolePut(RoleDto roleDto);
+
+    /**
+     * 系统管理子菜单角色管理点击新增两个表连表新增
+     * @param adminRoleDto
+     * @return
+     */
+    ResponseResult adminRolePost(AdminRoleDto adminRoleDto);
+
+    /**
+     * 需要提供修改角色的功能。修改角色时可以修改角色所关联的菜单权限
+     * 第一步：角色信息回显接口
+     * @param id
+     * @return
+     */
+    ResponseResult adminRoleSelect(Long id);
 }
 

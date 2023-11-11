@@ -22,7 +22,7 @@ import static com.yangbiao.constants.SystemConstants.LINK_STATUS_NORMAL;
  * @since 2023-06-18 11:45:20
  */
 @Service("linkService")
-public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
+public class  LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
 
 
     @Override

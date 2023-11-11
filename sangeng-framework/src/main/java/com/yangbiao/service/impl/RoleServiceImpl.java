@@ -4,15 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.AdminRoleDto;
 import com.yangbiao.domain.dto.RoleDto;
 import com.yangbiao.domain.entity.Role;
+import com.yangbiao.domain.entity.RoleMenu;
 import com.yangbiao.domain.vo.PageVo;
 import com.yangbiao.domain.vo.RoleVo;
 import com.yangbiao.mapper.RoleMapper;
+import com.yangbiao.service.RoleMenuService;
 import com.yangbiao.service.RoleService;
 import com.yangbiao.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -31,6 +35,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Autowired
     private RoleMapper roleMapper;
+
+    @Autowired
+    private RoleMenuService roleMenuService;
+
 
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
@@ -82,5 +90,38 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         roleMapper.update(role,wrapper);
         return ResponseResult.okResult();
     }
+
+    @Override
+    @Transactional
+    public ResponseResult adminRolePost(AdminRoleDto adminRoleDto) {
+        //数据转换
+        Role role = BeanCopyUtils.copyBean(adminRoleDto, Role.class);
+        //判断前端是否传来数据
+        if(role != null){
+            save(role);
+            //保存对应的权限 数据库会自动为每个新插入的记录分配一个唯一的ID，并将其返回给应用程序。
+            role.getMenuIds().stream()
+                    .forEach(menuId-> roleMenuService.save(new RoleMenu(role.getId(), menuId)));
+        }
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminRoleSelect(Long id) {
+
+        Role role = roleMapper.selectById(id);
+//        LambdaQueryWrapper<Role> roleWrapper = new LambdaQueryWrapper<>();
+//        roleWrapper.eq(Role::getId,role.getId());
+//        roleMapper.update(role,roleWrapper);
+//
+//
+//        LambdaQueryWrapper<RoleMenu> roleMenuWrapper = new LambdaQueryWrapper<>();
+//        roleMenuWrapper.eq(Role::getId,role.roleId());
+//        roleMenuService.update()
+
+        return ResponseResult.okResult(role);
+    }
+
+
 }
 

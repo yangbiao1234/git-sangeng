@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 角色信息表(Role)表实体类
@@ -52,7 +53,9 @@ public class Role {
     //备注
     private String remark;
 
-
+    //菜单权限id  该属性在数据库表中不存在对应的字段
+    @TableField(exist = false)
+    private List<Long> menuIds;
 
 }
 

@@ -1,6 +1,7 @@
 package com.yangbiao.controller;
 
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.AdminRoleDto;
 import com.yangbiao.domain.dto.RoleDto;
 import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.domain.entity.Role;
@@ -21,7 +22,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("/list")
-    public ResponseResult adminMenuList(@RequestParam Integer pageNum, Integer pageSize, Role role){
+    public ResponseResult adminRoleList(@RequestParam Integer pageNum, Integer pageSize, Role role){
 
         return roleService.adminRoleList(pageNum,pageSize,role);
     }
@@ -32,8 +33,30 @@ public class RoleController {
      * @return
      */
     @PutMapping("/changeStatus")
-    public ResponseResult adminMenuList(@RequestBody RoleDto roleDto){
+    public ResponseResult adminRoleList(@RequestBody RoleDto roleDto){
 
         return roleService.adminRolePut(roleDto);
+    }
+
+    /**
+     * 新增角色
+     * @param adminRoleDto
+     * @return
+     */
+    @PostMapping
+    public ResponseResult adminRolePost(@RequestBody AdminRoleDto adminRoleDto){
+
+        return roleService.adminRolePost(adminRoleDto);
+    }
+
+    /**
+     * 修改角色
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseResult adminRoleSelect(@PathVariable Long id){
+
+        return roleService.adminRoleSelect(id);
     }
 }
