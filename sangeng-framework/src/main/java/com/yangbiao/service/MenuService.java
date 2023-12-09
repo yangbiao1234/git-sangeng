@@ -75,5 +75,17 @@ public interface MenuService extends IService<Menu> {
      * @return
      */
     ResponseResult adminMenuDelete(long id);
+
+    /**
+     * Path格式请求参数：
+     * id: 角色id
+     * 响应格式：
+     * 字段介绍
+     * ​menus：菜单树。
+     * ​checkedKeys：角色所关联的菜单权限id列表。
+     * @param id
+     * @return
+     */
+    ResponseResult roleMenuTreeSelect(Long id);
 }
 

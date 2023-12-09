@@ -11,6 +11,5 @@ import com.yangbiao.domain.entity.RoleMenu;
  * @since 2023-11-11 20:53:57
  */
 public interface RoleMenuService extends IService<RoleMenu> {
-
 }
 

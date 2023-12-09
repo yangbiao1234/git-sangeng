@@ -57,5 +57,21 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     ResponseResult adminRoleSelect(Long id);
+
+    /**
+     * 更新角色信息
+     * 第二步：根据回显的数据进行修改
+     * @param role
+     * @return
+     */
+    ResponseResult adminRolePut(Role role);
+
+    /**
+     * 删除固定的某个角色（逻辑删除）
+     * id：要删除的角色id
+     * @param id
+     * @return
+     */
+    ResponseResult adminRoleDelete(Long id);
 }
 

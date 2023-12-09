@@ -3,7 +3,6 @@ package com.yangbiao.controller;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.dto.AdminRoleDto;
 import com.yangbiao.domain.dto.RoleDto;
-import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.domain.entity.Role;
 import com.yangbiao.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +57,28 @@ public class RoleController {
     public ResponseResult adminRoleSelect(@PathVariable Long id){
 
         return roleService.adminRoleSelect(id);
+    }
+
+    /**
+     * 更新角色信息
+     * @param role
+     * @return
+     */
+    @PutMapping
+    public ResponseResult adminRolePut(@RequestBody Role role){
+
+        roleService.adminRolePut(role);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * 删除固定的某个角色（逻辑删除）
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseResult adminRoleDelete(@PathVariable Long id){
+
+        return roleService.adminRoleDelete(id);
     }
 }

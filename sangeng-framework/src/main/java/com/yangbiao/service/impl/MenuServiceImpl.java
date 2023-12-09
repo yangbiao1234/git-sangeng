@@ -5,17 +5,27 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.entity.Menu;
+import com.yangbiao.domain.entity.Role;
+import com.yangbiao.domain.entity.RoleMenu;
 import com.yangbiao.domain.entity.Tag;
+import com.yangbiao.domain.vo.MenuTreeSelectAllVo;
+import com.yangbiao.domain.vo.MenuTreeSelectVo;
+import com.yangbiao.domain.vo.MenuTreeVo;
 import com.yangbiao.domain.vo.MenuVo;
 import com.yangbiao.enums.AppHttpCodeEnum;
 import com.yangbiao.mapper.MenuMapper;
+import com.yangbiao.mapper.RoleMapper;
+import com.yangbiao.mapper.RoleMenuMapper;
 import com.yangbiao.service.MenuService;
+import com.yangbiao.service.RoleMenuService;
 import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.SecurityUtils;
+import com.yangbiao.utils.SystemConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +43,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Autowired
     private MenuService menuService;
 
-    @Autowired
+    @Resource
     private MenuMapper menuMapper;
+
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
+
+    @Resource
+    private RoleMapper roleMapper;
+    @Resource
+    private RoleMenuService roleMenuService;
 
 
     @Override
@@ -134,6 +152,40 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return ResponseResult.okResult();
     }
 
+    @Override
+    public ResponseResult roleMenuTreeSelect(Long id) {
+
+        //获取所有权限
+        List<Menu> menus = list();
+        //查询菜单树
+        List<MenuTreeSelectVo> treeSelectChildren = getTreeSelectChildren(menus, SystemConstants.PARENT_ID_LONG);
+        //已选菜单
+        List<RoleMenu> menuIds = roleMenuService.lambdaQuery().eq(RoleMenu::getRoleId, id).list();
+        List<Long> collect = menuIds.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
+        //封装返回
+        MenuTreeSelectAllVo menuTreeSelectAllVo = new MenuTreeSelectAllVo(treeSelectChildren, collect);
+        return ResponseResult.okResult(menuTreeSelectAllVo);
+    }
+
+    /**
+     * 这段代码的作用是根据给定的父级菜单ID，递归地获取该菜单下的所有子菜单，并将它们封装为MenuTreeSelectVo对象列表返回。
+     */
+    private List<MenuTreeSelectVo> getTreeSelectChildren(List<Menu> menus, Long parentId) {
+
+        //菜单权限表 menu.getParentId() 父菜单id表示为"0"表示为父菜单
+        return menus.stream()
+                .filter( menu -> menu.getParentId().equals(parentId))
+                .map(menu ->
+                {
+                    MenuTreeSelectVo menuTreeSelectVo = BeanCopyUtils.copyBean(menu, MenuTreeSelectVo.class);
+                    menuTreeSelectVo.setChildren(getTreeSelectChildren(menus,menu.getId()));
+                    menuTreeSelectVo.setLabel(menu.getMenuName());
+                    return menuTreeSelectVo;
+                })
+                .collect(Collectors.toList());
+    }
+
+
     /**
      * 先找出第一层的菜单，然后去找他们的子菜单设置到children属性中
      * .filter()  符合括号中筛选条件的值留下
@@ -146,7 +198,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .filter(menu -> menu.getParentId().equals(parentId))
                 .map(menu -> menu.setChildren(getChildren(menu, menus)))
                 .collect(Collectors.toList());
-
         return menuTree;
     }
 
@@ -161,7 +212,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<Menu> childrenList = menus.stream()
                 .filter(m -> m.getParentId().equals(menu.getId()))
                 .collect(Collectors.toList());
-
         return childrenList;
     }
 }

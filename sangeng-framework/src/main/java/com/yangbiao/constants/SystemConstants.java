@@ -90,4 +90,9 @@ public class SystemConstants
      */
     public static final String PARENT_ID = "0";
 
+    /**
+     * 菜单权限表父菜单Id
+     */
+    public static final Long PARENT_ID_LONG = 0L;
+
 }

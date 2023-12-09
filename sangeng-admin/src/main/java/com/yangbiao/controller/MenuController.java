@@ -85,11 +85,20 @@ public class MenuController {
      * 获取菜单下拉树列表
      */
     @GetMapping("/treeselect")
-    public ResponseResult treeselect() {
+    public ResponseResult treeSelect() {
         //复用之前的selectMenuList方法。方法需要参数，参数可以用来进行条件查询，而这个方法不需要条件，所以直接new Menu()传入
         List<Menu> menus = menuService.adminMenuList(new Menu());
         List<MenuTreeVo> options =  SystemConverter.buildMenuSelectTree(menus);
         return ResponseResult.okResult(options);
     }
 
+    /**
+     * 5.21.2.2 加载对应角色菜单列表树接口
+     */
+    @GetMapping("/roleMenuTreeselect/{id}")
+    public ResponseResult roleMenuTreeSelect(@PathVariable Long id) {
+
+
+        return menuService.roleMenuTreeSelect(id);
+    }
 }

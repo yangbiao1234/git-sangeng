@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static net.sf.jsqlparser.util.validation.metadata.NamedObject.role;
 
@@ -120,6 +122,24 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 //        roleMenuService.update()
 
         return ResponseResult.okResult(role);
+    }
+
+    @Override
+    public ResponseResult adminRolePut(Role role) {
+        updateById(role);
+        List<RoleMenu> roleMenus = role.getMenuIds().stream()
+                .map(mid -> new RoleMenu(role.getId(), Long.parseLong(String.valueOf(mid))))
+                .collect(Collectors.toList());
+        LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(RoleMenu::getRoleId,role.getId());
+        roleMenuService.remove(wrapper);
+        roleMenuService.saveBatch(roleMenus);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminRoleDelete(Long id) {
+        return ResponseResult.okResult(roleMapper.deleteById(id));
     }
 
 
