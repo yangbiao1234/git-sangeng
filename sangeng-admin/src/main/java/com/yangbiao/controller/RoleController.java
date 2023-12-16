@@ -81,4 +81,13 @@ public class RoleController {
 
         return roleService.adminRoleDelete(id);
     }
+
+    /**
+     * 查询角色列表接口
+     * @return
+     */
+    @GetMapping("/listAllRole")
+    public ResponseResult adminListAllRole(){
+        return roleService.adminListAllRole();
+    }
 }

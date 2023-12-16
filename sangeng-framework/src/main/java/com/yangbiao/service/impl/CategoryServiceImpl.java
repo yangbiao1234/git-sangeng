@@ -1,18 +1,26 @@
 package com.yangbiao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.CategoryDto;
+import com.yangbiao.domain.dto.PageDto;
+import com.yangbiao.domain.dto.QueryCategoryDto;
 import com.yangbiao.domain.entity.Article;
 import com.yangbiao.domain.entity.Category;
+import com.yangbiao.domain.vo.CategoryListVo;
 import com.yangbiao.domain.vo.CategoryVo;
+import com.yangbiao.domain.vo.PageVo;
 import com.yangbiao.mapper.CategoryMapper;
 import com.yangbiao.service.ArticleService;
 import com.yangbiao.service.CategoryService;
 import com.yangbiao.utils.BeanCopyUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -64,5 +72,48 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(list, CategoryVo.class);
         return categoryVos;
     }
+
+    @Override
+    public ResponseResult adminListCategory(PageDto pageDto, QueryCategoryDto queryCategoryDto) {
+
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(queryCategoryDto.getName()),Category::getName, queryCategoryDto.getName())
+                .eq(queryCategoryDto.getStatus()!=null,Category::getStatus, queryCategoryDto.getStatus())
+                .orderByDesc(Category::getCreateTime);
+        Page<Category> categoryPage = page(new Page<>(pageDto.getPageNum(), pageDto.getPageSize()), wrapper);
+        List<Category> categoryList = categoryPage.getRecords();
+        List<CategoryListVo> categoryListVos = BeanCopyUtils.copyBeanList(categoryList, CategoryListVo.class);
+        return ResponseResult.okResult(new PageVo(categoryListVos, categoryPage.getTotal()));
+    }
+
+    @Override
+    public ResponseResult adminCategory(CategoryDto categoryDto) {
+        Category category = BeanCopyUtils.copyBean(categoryDto, Category.class);
+        //插入一条记录（选择字段，策略插入）
+        save(category);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult AdminGetCategoryById(Integer id) {
+        Category category = getById(id);
+        CategoryDto categoryDto = BeanCopyUtils.copyBean(category, CategoryDto.class);
+        return ResponseResult.okResult(categoryDto);
+    }
+
+    @Override
+    public ResponseResult adminUpdateCategory(CategoryDto categoryDto) {
+        Category category = BeanCopyUtils.copyBean(categoryDto, Category.class);
+        updateById(category);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult<Object> adminDeleteCategory(Long id) {
+        removeById(id);
+        return ResponseResult.okResult();
+    }
+
+
 }
 

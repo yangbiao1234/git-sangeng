@@ -6,6 +6,7 @@ import com.yangbiao.domain.dto.AdminRoleDto;
 import com.yangbiao.domain.dto.RoleDto;
 import com.yangbiao.domain.entity.Menu;
 import com.yangbiao.domain.entity.Role;
+import com.yangbiao.domain.vo.SimpleRoleVo;
 
 import java.util.List;
 
@@ -73,5 +74,14 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     ResponseResult adminRoleDelete(Long id);
+
+    /**
+     * 查询角色列表接口
+     * 注意：查询的是所有状态正常的角色
+     * @return
+     */
+    ResponseResult adminListAllRole();
+
+    ResponseResult<List<SimpleRoleVo>> adminGetAllRole();
 }
 

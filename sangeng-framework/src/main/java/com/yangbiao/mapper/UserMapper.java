@@ -2,6 +2,10 @@ package com.yangbiao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yangbiao.domain.entity.User;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -12,5 +16,10 @@ import com.yangbiao.domain.entity.User;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    boolean insertUserRole(@Param("userId") Long userId, @Param("roleIds") List<Long> roleIds);
+
+    boolean deleteUserRole(@Param("id") Long id);
+
+    List<Long> getRoleIdsByUserId(Long id);
 }
 

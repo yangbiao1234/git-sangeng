@@ -2,6 +2,9 @@ package com.yangbiao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.CategoryDto;
+import com.yangbiao.domain.dto.PageDto;
+import com.yangbiao.domain.dto.QueryCategoryDto;
 import com.yangbiao.domain.entity.Category;
 import com.yangbiao.domain.vo.CategoryVo;
 
@@ -29,5 +32,46 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     List<CategoryVo> listAllCategory();
+
+    /**
+     * 需要分页查询分类列表。
+     *
+     * ​	能根据分类名称进行模糊查询。
+     *
+     * ​	能根据状态进行查询。
+     * @param pageDto
+     * @param queryCategoryDto
+     * @return
+     */
+    ResponseResult adminListCategory(PageDto pageDto, QueryCategoryDto queryCategoryDto);
+
+    /**
+     *  需要新增分类功能
+     * @param categoryDto
+     * @return
+     */
+    ResponseResult adminCategory(CategoryDto categoryDto);
+
+    /**
+     * 需要提供修改分类的功能
+     * 根据id查询分类
+     * @param id
+     * @return
+     */
+    ResponseResult AdminGetCategoryById(Integer id);
+
+    /**
+     *  更新分类
+     * @param categoryDto
+     * @return
+     */
+    ResponseResult adminUpdateCategory(CategoryDto categoryDto);
+
+    /**
+     * 根据id删除某个分类（逻辑删除）
+     * @param id
+     * @return
+     */
+    ResponseResult adminDeleteCategory(Long id);
 }
 

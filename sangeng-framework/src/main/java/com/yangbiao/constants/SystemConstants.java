@@ -95,4 +95,10 @@ public class SystemConstants
      */
     public static final Long PARENT_ID_LONG = 0L;
 
+    /**
+     * 角色状态正常
+     */
+    public static final String ROLE_STATUS_NORMAL = "0";
+
+
 }

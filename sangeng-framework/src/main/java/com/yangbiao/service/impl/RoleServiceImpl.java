@@ -3,6 +3,7 @@ package com.yangbiao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yangbiao.constants.SystemConstants;
 import com.yangbiao.domain.ResponseResult;
 import com.yangbiao.domain.dto.AdminRoleDto;
 import com.yangbiao.domain.dto.RoleDto;
@@ -10,6 +11,8 @@ import com.yangbiao.domain.entity.Role;
 import com.yangbiao.domain.entity.RoleMenu;
 import com.yangbiao.domain.vo.PageVo;
 import com.yangbiao.domain.vo.RoleVo;
+import com.yangbiao.domain.vo.RoleVo1;
+import com.yangbiao.domain.vo.SimpleRoleVo;
 import com.yangbiao.mapper.RoleMapper;
 import com.yangbiao.service.RoleMenuService;
 import com.yangbiao.service.RoleService;
@@ -140,6 +143,22 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public ResponseResult adminRoleDelete(Long id) {
         return ResponseResult.okResult(roleMapper.deleteById(id));
+    }
+
+    @Override
+    public ResponseResult adminListAllRole() {
+        LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Role::getStatus, SystemConstants.ROLE_STATUS_NORMAL);
+        List<Role> roles = list(wrapper);
+        List<RoleVo1> roleVoList = BeanCopyUtils.copyBeanList(roles, RoleVo1.class);
+        return ResponseResult.okResult(roleVoList);
+    }
+
+    @Override
+    public ResponseResult<List<SimpleRoleVo>> adminGetAllRole() {
+        List<Role> roleList = list();
+        List<SimpleRoleVo> simpleRoleVoList = BeanCopyUtils.copyBeanList(roleList, SimpleRoleVo.class);
+        return ResponseResult.okResult(simpleRoleVoList);
     }
 
 

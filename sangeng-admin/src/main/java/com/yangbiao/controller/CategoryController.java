@@ -3,6 +3,9 @@ package com.yangbiao.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.yangbiao.domain.ResponseResult;
+import com.yangbiao.domain.dto.CategoryDto;
+import com.yangbiao.domain.dto.PageDto;
+import com.yangbiao.domain.dto.QueryCategoryDto;
 import com.yangbiao.domain.entity.Category;
 import com.yangbiao.domain.vo.CategoryVo;
 import com.yangbiao.domain.vo.ExcelCategoryVo;
@@ -12,9 +15,8 @@ import com.yangbiao.utils.BeanCopyUtils;
 import com.yangbiao.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -65,4 +67,31 @@ public class CategoryController {
         }
 
     }
+
+    @GetMapping("/list")
+    public ResponseResult adminListCategory(PageDto pageDto,
+                                            QueryCategoryDto queryCategoryDto) {
+        return categoryService.adminListCategory(pageDto, queryCategoryDto);
+    }
+
+    @PostMapping
+    public ResponseResult adminCategory(@RequestBody @Validated(CategoryDto.Update.class) CategoryDto categoryDto) {
+        return categoryService.adminCategory(categoryDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult AdminGetCategoryById(@PathVariable("id") Integer id) {
+        return categoryService.AdminGetCategoryById(id);
+    }
+
+    @PutMapping
+    public ResponseResult adminUpdateCategory(@RequestBody @Validated({CategoryDto.Update.class})CategoryDto categoryDto) {
+        return categoryService.adminUpdateCategory(categoryDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult adminDeleteCategory(@PathVariable("id") Long id) {
+        return categoryService.adminDeleteCategory(id);
+    }
 }
+
